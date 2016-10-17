@@ -137,6 +137,40 @@ public class SQLiteDatabase {
         //System.out.println("**select query successfully");
     }
 
+    public void getTableInfo(String inputTableName) {
+        //System.out.println("----------------------------");
+        Connection connection = null;
+        Statement statement = null;
+        try {
+            Class.forName("org.sqlite.JDBC");
+            connection = getDatbaseConnection();
+            connection.setAutoCommit(false);
+            //System.out.println("**Opened database successfully in select() method");
+
+            statement = connection.createStatement();
+            //"PRAGMA table_info('issue');
+            ResultSet resultset = statement.executeQuery("PRAGMA table_info('" + inputTableName + "');");
+            ResultSetMetaData resultSetMetaData = resultset.getMetaData();
+            int cols = resultSetMetaData.getColumnCount();
+            while (resultset.next()) {
+                for (int i = 1; i < cols; i++) {
+                    String colName = resultSetMetaData.getColumnName(i);
+                    String colVal = resultset.getString(i);
+                    System.out.println(colName + ": " + colVal);
+                }
+                System.out.println("");
+            }
+
+            resultset.close();
+            statement.close();
+            connection.commit();
+            connection.close();
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+        }
+        //System.out.println("**select query successfully");
+    }
+
     public void update(String inputSql) {
         //System.out.println("----------------------------");
         Connection connection = null;
@@ -251,4 +285,4 @@ public class SQLiteDatabase {
         }
     }
 
-}
+}//end class

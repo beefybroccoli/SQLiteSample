@@ -7,7 +7,9 @@ public class TestSQLiteDatabase {
 
     public static void main(String[] args) {
 
-        String[] databaseName = {"ab", "bc", "de", "fg"};
+        String[] databaseName = {"ab"
+        //        , "bc", "de", "fg"
+        };
         for (String element: databaseName) {
             createSampleDatabase(element);
         }
@@ -34,6 +36,8 @@ public class TestSQLiteDatabase {
         sqlite.delete(getDeleteQuery());
 
         sqlite.select(getGenericSelectQuery());
+        
+        sqlite.getTableInfo("COMPANY");
     }
 
     public static List<String> getInsertQueries() {

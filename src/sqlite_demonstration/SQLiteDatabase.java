@@ -145,7 +145,7 @@ public class SQLiteDatabase {
             Class.forName("org.sqlite.JDBC");
             connection = getDatbaseConnection();
             connection.setAutoCommit(false);
-            //System.out.println("**Opened database successfully in select() method");
+            //System.out.println("**Opened database successfully in getTableInfo() method");
 
             statement = connection.createStatement();
             //"PRAGMA table_info('issue');
@@ -236,22 +236,6 @@ public class SQLiteDatabase {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
         }
         //System.out.println("**insert query successfully");
-    }
-
-    public void processResultSet(ResultSet resultset) throws SQLException {
-        while (resultset.next()) {
-            int id = resultset.getInt("id");
-            String name = resultset.getString("name");
-            int age = resultset.getInt("age");
-            String address = resultset.getString("address");
-            float salary = resultset.getFloat("salary");
-            System.out.println("ID = " + id);
-            System.out.println("NAME = " + name);
-            System.out.println("AGE = " + age);
-            System.out.println("ADDRESS = " + address);
-            System.out.println("SALARY = " + salary);
-            System.out.println();
-        }
     }
 
     public void processGenericResultSet(ResultSet resultset) throws SQLException {

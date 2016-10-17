@@ -1,19 +1,69 @@
-package sqlite_demonstration;
+package implementation;
 
 import java.util.ArrayList;
 import java.util.List;
+import sqlite_demonstration.SQLiteDatabase;
 
 public class TestSQLiteDatabase {
 
     public static void main(String[] args) {
 
-        String[] databaseName = {"ab"
-                , "bc", "de", "fg"
+        //runTest1();
+        //runTest2();
+        runTest3();
+    }
+
+    public static void runTest2() {
+        String[] databaseName = {"ab", "bc", "de", "fg"
         };
-        for (String element: databaseName) {
+        for (String element : databaseName) {
             createSampleDatabase(element);
         }
+
+    }
+
+    public static void runTest3() {
+
+        String database_name = "database";
+
+        SQLiteDatabase sqlite = new SQLiteDatabase(database_name);
+
+        sqlite.createTable(getCreatTableQuery());
+
+        sqlite.insert(getInsertQueries());
+
+        sqlite.select(getGenericSelectQuery());
         
+        sqlite.insert(getInsertQueries2());
+
+        sqlite.select(getGenericSelectQuery());
+
+    }
+
+    public static void runTest1() {
+        String databaseName = "database";
+
+        SQLiteDatabase sqlite = new SQLiteDatabase(databaseName);
+
+        sqlite.createTable(getCreatTableQuery());
+
+        sqlite.insert(getInsertQueries());
+
+        sqlite.select(getGenericSelectQuery());
+
+        sqlite.update(getUpdateQuery());
+
+        sqlite.select(getGenericSelectQuery());
+
+        sqlite.delete(getDeleteQuery());
+
+        sqlite.select(getGenericSelectQuery());
+
+        sqlite.getTableInfo("COMPANY");
+
+        SQLiteDatabase sqlite2 = new SQLiteDatabase(databaseName);
+
+        sqlite2.select(getGenericSelectQuery());
     }
 
     public static void createSampleDatabase(String inputDatabaseName) {
@@ -35,7 +85,7 @@ public class TestSQLiteDatabase {
         sqlite.delete(getDeleteQuery());
 
         sqlite.select(getGenericSelectQuery());
-        
+
         sqlite.getTableInfo("COMPANY");
     }
 
@@ -67,6 +117,34 @@ public class TestSQLiteDatabase {
 
     }
 
+    public static List<String> getInsertQueries2() {
+        String sql = "";
+        List<String> result = new ArrayList<String>();
+
+        sql = "INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY) "
+                + "VALUES (5, 'Paul', 32, 'California', 20000.00 );";
+        result.add(sql);
+
+        sql = "INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY) "
+                + "VALUES (6, 'Allen', 25, 'Texas', 15000.00 );";
+        result.add(sql);
+
+        sql = "INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY) "
+                + "VALUES (7, 'Teddy', 23, 'Norway', 20000.00 );";
+        result.add(sql);
+
+        sql = "INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY) "
+                + "VALUES (8, 'Mark', 25, 'Rich-Mond ', 65000.00 );";
+        result.add(sql);
+
+        sql = "INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY) "
+                + "VALUES (9, 'James', 65, 'Rich-Mond ', 65000.00 );";
+        result.add(sql);
+
+        return result;
+
+    }
+
     public static String getGenericSelectQuery() {
         return "SELECT * FROM COMPANY";
     }
@@ -89,4 +167,3 @@ public class TestSQLiteDatabase {
     }
 
 }
-

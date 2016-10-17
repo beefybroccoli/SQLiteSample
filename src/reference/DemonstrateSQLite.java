@@ -18,6 +18,15 @@ import java.sql.Statement;
  */
 public class DemonstrateSQLite {
 
+    private static int MAXIMUM_COLUMS_PER_TABLE = 200;
+    private static int MAXIMUM_JOIN_TABLES = 64;
+    private static int MAXIMUM_COMPOUND_SELECT = 500;
+    /*
+    A compound SELECT statement is two or more SELECT statements 
+    connected by operators UNION, UNION ALL, EXCEPT, or INTERSECT. 
+    We call each individual SELECT statement within a compound SELECT a "term".
+    */
+    private static int THEOREICAL_MAXIMUM_NUMBER_OF_ROWS_IN_TABLE = 2^64;
     public static String LINUX_DIRECTORY = "./src/db/";
     public static String DATABASE_NAME = "test.db";
     public static String CONNECTION_STRING = "jdbc:sqlite:" + LINUX_DIRECTORY + DATABASE_NAME;

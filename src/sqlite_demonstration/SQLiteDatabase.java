@@ -15,9 +15,28 @@ import java.util.Set;
 
 public class SQLiteDatabase {
 
+    /*
+    SQLite does not support joins containing more than 64 tables
+    The maximum number of bytes in the text of an SQL statement is 1000000
+    SQLite does not support joins containing more than 64 tables. 
+    The SQLITE_MAX_FUNCTION_ARG parameter determines the maximum number of parameters 
+        that can be passed to an SQL function. The default value of this limit is 100.
+    The number of arguments to a function is sometimes stored in a signed character. 
+        So there is a hard upper bound on SQLITE_MAX_FUNCTION_ARG of 127.
+    A compound SELECT statement is two or more SELECT statements connected 
+        by operators UNION, UNION ALL, EXCEPT, or INTERSECT. 
+        We call each individual SELECT statement within a compound SELECT a "term".
+        The maximum number of terms is SQLITE_MAX_COMPOUND_SELECT which defaults to 500.
+    The theoretical maximum number of rows in a table is 264 
+    
+     */
     private String DATABASE_DIRECTORY = "./src/db/";
     private String DATABASE_NAME = "database.db";
     private static String CONNECTION_STRING = "";
+
+    public SQLiteDatabase() {
+        CONNECTION_STRING = "jdbc:sqlite:" + DATABASE_DIRECTORY + DATABASE_NAME;
+    }
 
     public SQLiteDatabase(String inputDatabaseName) {
         DATABASE_NAME = inputDatabaseName;
@@ -128,11 +147,11 @@ public class SQLiteDatabase {
 
             statement = connection.createStatement();
             resultset = statement.executeQuery(inputSql);
-            
+
             //resultset.close();
             statement.close();
             connection.close();
-            
+
             return resultset;
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
@@ -219,7 +238,7 @@ public class SQLiteDatabase {
     }
 
     public static void insert(List<String> inputSql) {
-        System.out.println("----------------------------");
+        //System.out.println("----------------------------");
         Connection connection = getDatbaseConnection();
         Statement statement = null;
         try {

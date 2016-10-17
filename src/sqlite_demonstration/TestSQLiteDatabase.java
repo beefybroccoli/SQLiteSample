@@ -8,7 +8,7 @@ public class TestSQLiteDatabase {
     public static void main(String[] args) {
 
         String[] databaseName = {"ab"
-        //        , "bc", "de", "fg"
+                , "bc", "de", "fg"
         };
         for (String element: databaseName) {
             createSampleDatabase(element);
@@ -19,9 +19,8 @@ public class TestSQLiteDatabase {
     public static void createSampleDatabase(String inputDatabaseName) {
 
         String database_name = inputDatabaseName;
-        String linx_database_directory = "./src/db/";
 
-        SQLiteDatabase sqlite = new SQLiteDatabase(linx_database_directory, database_name);
+        SQLiteDatabase sqlite = new SQLiteDatabase(database_name);
 
         sqlite.createTable(getCreatTableQuery());
 

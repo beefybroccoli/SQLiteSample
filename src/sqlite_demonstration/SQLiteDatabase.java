@@ -15,42 +15,16 @@ import java.util.Set;
 
 public class SQLiteDatabase {
 
-    private String DATABASE_DIRECTORY = "";
-    private String DATABASE_NAME = "";
-    private String CONNECTION_STRING = "";
-
-    public SQLiteDatabase() {
-
-    }
+    private String DATABASE_DIRECTORY = "./src/db/";
+    private String DATABASE_NAME = "database.db";
+    private static String CONNECTION_STRING = "";
 
     public SQLiteDatabase(String inputDatabaseName) {
-        DATABASE_NAME = inputDatabaseName;
-        CONNECTION_STRING = "jdbc:sqlite:" + DATABASE_DIRECTORY + inputDatabaseName;
-    }
-
-    public SQLiteDatabase(String inputDirectory, String inputDatabaseName) {
-        DATABASE_DIRECTORY = inputDirectory;
         DATABASE_NAME = inputDatabaseName;
         CONNECTION_STRING = "jdbc:sqlite:" + DATABASE_DIRECTORY + DATABASE_NAME;
     }
 
-    public String getDATABASE_DIRECTORY() {
-        return DATABASE_DIRECTORY;
-    }
-
-    public void setDATABASE_DIRECTORY(String DATABASE_DIRECTORY) {
-        this.DATABASE_DIRECTORY = DATABASE_DIRECTORY;
-    }
-
-    public String getDATABASE_NAME() {
-        return DATABASE_NAME;
-    }
-
-    public void setDATABASE_NAME(String DATABASE_NAME) {
-        this.DATABASE_NAME = DATABASE_NAME;
-    }
-
-    public Connection getDatbaseConnection() {
+    public static Connection getDatbaseConnection() {
         Connection connection = null;
         try {
             connection = DriverManager.getConnection(CONNECTION_STRING);
@@ -63,7 +37,7 @@ public class SQLiteDatabase {
 
     }
 
-    public void createTable(String inputSql) {
+    public static void createTable(String inputSql) {
         //System.out.println("----------------------------");
         Connection connection = null;
         Statement statement = null;
@@ -87,7 +61,7 @@ public class SQLiteDatabase {
         //System.out.println("**create table successfully");
     }
 
-    public void createTable(List<String> inputSql) {
+    public static void createTable(List<String> inputSql) {
         //System.out.println("----------------------------");
         Connection connection = null;
         Statement statement = null;
@@ -113,7 +87,7 @@ public class SQLiteDatabase {
         //System.out.println("**create table successfully");
     }
 
-    public void select(String inputSql) {
+    public static void select(String inputSql) {
         //System.out.println("----------------------------");
         Connection connection = null;
         Statement statement = null;
@@ -125,11 +99,10 @@ public class SQLiteDatabase {
 
             statement = connection.createStatement();
             ResultSet resultset = statement.executeQuery(inputSql);
-            processGenericResultSet(resultset);
+            displayResultSet(resultset);
 
             resultset.close();
             statement.close();
-            connection.commit();
             connection.close();
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
@@ -137,7 +110,38 @@ public class SQLiteDatabase {
         //System.out.println("**select query successfully");
     }
 
-    public void getTableInfo(String inputTableName) {
+    /**
+     *
+     * @param inputSql
+     * @return
+     */
+    public static ResultSet selectAndReturnResultSet(String inputSql) {
+        //System.out.println("----------------------------");
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultset = null;
+        try {
+            Class.forName("org.sqlite.JDBC");
+            connection = getDatbaseConnection();
+            connection.setAutoCommit(false);
+            //System.out.println("**Opened database successfully in select() method");
+
+            statement = connection.createStatement();
+            resultset = statement.executeQuery(inputSql);
+            
+            //resultset.close();
+            statement.close();
+            connection.close();
+            
+            return resultset;
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+        }
+        return resultset;
+        //System.out.println("**select query successfully");
+    }
+
+    public static void getTableInfo(String inputTableName) {
         //System.out.println("----------------------------");
         Connection connection = null;
         Statement statement = null;
@@ -163,7 +167,6 @@ public class SQLiteDatabase {
 
             resultset.close();
             statement.close();
-            connection.commit();
             connection.close();
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
@@ -171,7 +174,7 @@ public class SQLiteDatabase {
         //System.out.println("**select query successfully");
     }
 
-    public void update(String inputSql) {
+    public static void update(String inputSql) {
         //System.out.println("----------------------------");
         Connection connection = null;
         Statement statement = null;
@@ -193,8 +196,8 @@ public class SQLiteDatabase {
         //System.out.println("**update query successfully");
     }
 
-    public void delete(String inputSql) {
-        System.out.println("----------------------------");
+    public static void delete(String inputSql) {
+        //System.out.println("----------------------------");
         Connection connection = null;
         Statement statement = null;
         try {
@@ -205,8 +208,8 @@ public class SQLiteDatabase {
 
             statement = connection.createStatement();
             statement.executeUpdate(inputSql);
-            connection.commit();
 
+            connection.commit();
             statement.close();
             connection.close();
         } catch (Exception e) {
@@ -215,7 +218,7 @@ public class SQLiteDatabase {
         //System.out.println("**delete query successfully");
     }
 
-    public void insert(List<String> inputSql) {
+    public static void insert(List<String> inputSql) {
         System.out.println("----------------------------");
         Connection connection = getDatbaseConnection();
         Statement statement = null;
@@ -238,7 +241,7 @@ public class SQLiteDatabase {
         //System.out.println("**insert query successfully");
     }
 
-    public void processGenericResultSet(ResultSet resultset) throws SQLException {
+    public static void displayResultSet(ResultSet resultset) throws SQLException {
         ResultSetMetaData md = resultset.getMetaData();
         int columns = md.getColumnCount();
         List<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();

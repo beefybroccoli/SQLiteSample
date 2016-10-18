@@ -20,6 +20,12 @@ on such a data structure:
             in the same subset.
     _Union: Join two subsets into a single subset.
  */
+
+/*
+this DisjointSets is not suitable solution for 445 project.
+DisjoinSet is used for path matching.
+
+*/
 public class DisjointSets {
 
     private List<Map<Integer, Set<Integer>>> mDisjointSet;

@@ -12,7 +12,7 @@ import java.util.TreeSet;
 /*
 Run Time : N^3
 
-This solution is not suitable for the project
+This solution is not suitable for the 
 */
 
 public class Sort_Based_On_Value {

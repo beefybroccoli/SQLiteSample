@@ -2,6 +2,7 @@ package sqlite_demonstration;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -27,7 +28,7 @@ public class SQLiteDatabase {
         by operators UNION, UNION ALL, EXCEPT, or INTERSECT. 
         We call each individual SELECT statement within a compound SELECT a "term".
         The maximum number of terms is SQLITE_MAX_COMPOUND_SELECT which defaults to 500.
-    The theoretical maximum number of rows in a table is 264 
+    The theoretical maximum number of rows in a table is 2^64 
     
      */
     private String DATABASE_DIRECTORY = "./src/db/";
@@ -237,6 +238,10 @@ public class SQLiteDatabase {
         //System.out.println("**delete query successfully");
     }
 
+    /*
+    Statement object is vulnable to sql injection attack
+    PreparedStatement object has faster performance than Statement for repeating queries
+     */
     public static void insert(List<String> inputSql) {
         //System.out.println("----------------------------");
         Connection connection = getDatbaseConnection();
@@ -252,6 +257,31 @@ public class SQLiteDatabase {
                 statement.executeUpdate(sql);
             }
             statement.close();
+            connection.commit();
+            connection.close();
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+        }
+        //System.out.println("**insert query successfully");
+    }
+
+    public static void insertWithPreparedStatement(String inputQuery, List<String> label, List<String> value) {
+        //System.out.println("----------------------------");
+        Connection connection = getDatbaseConnection();
+        PreparedStatement preparedStatement = null;
+        try {
+            Class.forName("org.sqlite.JDBC");
+            connection = getDatbaseConnection();
+            connection.setAutoCommit(false);
+            //System.out.println("**Opened database successfully");
+            preparedStatement = connection.prepareStatement(inputQuery);
+
+            for (String sql : inputQuery) {
+                
+            }
+            
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
             connection.commit();
             connection.close();
         } catch (Exception e) {
